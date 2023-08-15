@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer
+from streamlit_webrtc import webrtc_streamer, RTCConfiguration
 import av
 import cv2
 import numpy as np
@@ -67,4 +67,14 @@ def callback(frame):
     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 
-webrtc_streamer(key="example", video_frame_callback=callback)
+RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+)
+webrtc_streamer(key="example", 
+                video_frame_callback=callback,
+                rtc_configuration=RTC_CONFIGURATION,
+                media_stream_constraints={
+                    "video": True,
+                    "audio": False
+                }
+)
